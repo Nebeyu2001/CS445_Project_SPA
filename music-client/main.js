@@ -182,7 +182,7 @@ function fetchPlayList() {
         songs.forEach((song) => {
           html += `
                       <tr id="${song.id}">
-                          <th scope="row">${counter}- ${song.id}</th>
+                          <th scope="row">${counter}</th>
                           <td>${song.title}</td>
                            <td>${song.releaseDate}</td>
                            <td>
