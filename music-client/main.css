@@ -7,6 +7,11 @@
     justify-content: space-between;
 }
 
+/* #header #left{
+    display:flex;
+    justify-content: space-between;
+} */
+
 #header #right {
     width: 650px;
     display: flex;
@@ -23,4 +28,19 @@
 
 #errormessage {
     color: red;
+}
+
+#footer-player{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin-bottom: 0px;
+    
+    width: 100%;
+    z-index: 1;
+    height: 100px;
+    
+    background-color: yellow;
+    border: solid black 1px;;
+
 }
