@@ -123,12 +123,12 @@ function fetchMusic() {
         let counter = 1;
         songs.forEach((song) => {
           html += `
-                    <tr id="${song.id}">
+                    <tr>
                         <th scope="row">${counter}</th>
                         <td>${song.title}</td>
                          <td>${song.releaseDate}</td>
                          <td>
-                         <input type="button" onclick="addToMyPlayList(this);" value="ADD"/>
+                         <input type="button" musicid="${song.id}" onclick="addToMyPlayList(this)" value="ADD"/>
                          
 
                      </tr>               
@@ -146,58 +146,6 @@ function fetchMusic() {
       //  console.log(songs)
     );
 }
-function addToMyPlayList(song) {
-  //songId = "3854de5d-aa34-431e-b3f5-d924e04a4f26";
-
-  let songAtt = song.getAttribute("id");
-  fetch(`${SERVER_ROOT}/api/playlist/add`, {
-    method: "POST",
-    body: JSON.stringify({
-      songId: songAtt,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    },
-  })
-    .then((response) => response.json())
-    .then((songs) => {
-      //   let html = `
-
-      //     <thead>
-      //         <tr>
-      //             <th scope="col">ID</th>
-      //             <th scope="col">Title</th>
-      //             <th scope="col">REl.Date</th>
-      //              <th scope="col">Actions</th>
-      //         </tr>
-      //     </thead>
-      //     <tbody id="table-body">
-
-      // `;
-
-      //   songs.forEach((song) => {
-      //     html += `
-      //               <tr id="${song.id}">
-      //                   <th scope="row">${song.orderId}</th>
-      //                   <td>${song.title}</td>
-      //                    <td>${song.releaseDate}</td>
-
-      //                </tr>
-      //          `;
-      //   });
-
-      //   html += `
-      //           </tbody>
-
-      //       `;
-      //   document.getElementById("pTable").innerHTML = html;
-      console.log(songs);
-    });
-
-  // console.log("adding--" + songId);
-}
-
 function fetchPlayList() {
   fetch(`${SERVER_ROOT}/api/playlist`, {
     method: "GET",
@@ -216,7 +164,6 @@ function fetchPlayList() {
               <tr>
                   <th scope="col">ID</th>
                   <th scope="col">Title</th>
-                  <th scope="col">REl.Date</th>
                    <th scope="col">Actions</th>
               </tr>
           </thead>
@@ -226,21 +173,119 @@ function fetchPlayList() {
 
         songs.forEach((song) => {
           html += `
-                      <tr id="${song.id}">
-                          <th scope="row">${song.orderID}</th>
-                          <td>${song.title}</td>
-                           <td>${song.releaseDate}</td>
-                           <td>
-
-                           
-  
-                       </tr>               
+        <tr>
+          <td scope="row">${song.orderId}</td>
+          <td>${song.title}</td>
+          <td><input type="button"  value="remove"/><input type="button"  value="play"/></td>
+       </tr>            
                  `;
         });
 
         html += `
                   </tbody>
               
+              `;
+        document.getElementById("pTable").innerHTML = html;
+      }
+
+      //  console.log(songs)
+    );
+}
+function addToMyPlayList(song) {
+  //songId = "3854de5d-aa34-431e-b3f5-d924e04a4f26";
+
+  let songAtt = song.getAttribute("musicid");
+  console.log(songAtt);
+
+  fetch(`${SERVER_ROOT}/api/playlist/add`, {
+    method: "POST",
+    body: JSON.stringify({
+      songId: songAtt,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((songs) => {
+      let html = `
+
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Title</th>
+                   <th scope="col">Actions</th>
+              </tr>
+          </thead>
+          <tbody id="table-body">
+
+      `;
+
+      songs.forEach((song) => {
+        html += `
+                    <tr>
+                        <td scope="row">${song.orderId}</td>
+                        <td>${song.title}</td>
+                        <td><input type="button" playlistId="${song.id}" onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
+                     </tr>
+               `;
+      });
+
+      html += `
+                </tbody>
+
+            `;
+      document.getElementById("pTable").innerHTML = html;
+
+      // console.log(songs);
+    });
+
+  // console.log("adding--" + songId);
+}
+
+function removePlayList(song) {
+  let songAtt = song.getAttribute("playlistId");
+  console.log(songAtt);
+  fetch(`${SERVER_ROOT}/api/playlist/remove`, {
+    method: "POST",
+    body: JSON.stringify({
+      songId: songAtt,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  })
+    .then((response) => response.json())
+    .then(
+      (songs) => {
+        let html = `
+
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Title</th>
+                   <th scope="col">Actions</th>
+              </tr>
+          </thead>
+          <tbody id="table-body">
+
+      `;
+
+        songs.forEach((song) => {
+          html += `
+        <tr>
+          <td scope="row">${song.orderId}</td>
+          <td>${song.title}</td>
+          <td><input type="button"  value="remove"/><input type="button"  value="play"/></td>
+       </tr>
+                 `;
+        });
+
+        html += `
+                  </tbody>
+
               `;
         document.getElementById("pTable").innerHTML = html;
       }
