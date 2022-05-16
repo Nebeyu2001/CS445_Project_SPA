@@ -33,6 +33,7 @@ window.onload = function () {
     localStorage.removeItem("accessToken");
     notLogin();
   };
+  searchSongs();
 };
 
 function loggedInFeatures(data) {
@@ -46,17 +47,21 @@ function loggedInFeatures(data) {
   }
 }
 
-function fetchMusic() {
-  fetch(`${SERVER_ROOT}/api/music`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    },
-  })
-    .then((response) => response.json())
-    .then(
-      (songs) => {
+function searchSongs() {
+  const searchItem = document.getElementById("search-input");
+  document.getElementById("searchBtn").onclick = function () {
+    fetch(`${SERVER_ROOT}/api/music?search=${searchItem.value}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((songs) => {
+        let searchTable = document.getElementById("mTable");
+        searchTable.innerHTML = "";
         let html = `
-        <table class="table" id=music-table">
+        
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -76,7 +81,7 @@ function fetchMusic() {
                         <td>${song.title}</td>
                          <td>${song.releaseDate}</td>
                          <td>
-                         <input type="button"  onclick="addToMyPlayList(${song.releaseDate} );" value="ADD"/>
+                         <input type="button"  onclick="addToMyPlayList(${song.id});" value="ADD"/>
                          
 
                      </tr>               
@@ -86,23 +91,16 @@ function fetchMusic() {
 
         html += `
                 </tbody>
-            </table>
+            
             `;
-        document.getElementById("musiclist").innerHTML = html;
-      }
-
-      //  console.log(songs)
-    );
+        searchTable.innerHTML = html;
+      });
+  };
 }
-function addToMyPlayList(songId) {
-  // songId = "3854de5d-aa34-431e-b3f5-d924e04a4f26";
-  fetch(`${SERVER_ROOT}/api/playlist/add`, {
-    method: "POST",
-    body: JSON.stringify({
-      songId,
-    }),
+
+function fetchMusic() {
+  fetch(`${SERVER_ROOT}/api/music`, {
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   })
@@ -110,12 +108,12 @@ function addToMyPlayList(songId) {
     .then(
       (songs) => {
         let html = `
-        <table class="table" id=playlist-table">
+        
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Title</th>
-                <th scope="col">REl.Date</th>
+                <th scope="col">Release Date</th>
                  <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -130,9 +128,7 @@ function addToMyPlayList(songId) {
                         <td>${song.title}</td>
                          <td>${song.releaseDate}</td>
                          <td>
-                        //  <audio controls>
-                        //     <source src="${SERVER_ROOT}/api/playlist/add" type="audio/mp3">  
-                        //  </audio>
+                         <input type="button" onclick="addToMyPlayList(this);" value="ADD"/>
                          
 
                      </tr>               
@@ -142,13 +138,62 @@ function addToMyPlayList(songId) {
 
         html += `
                 </tbody>
-            </table>
+            
             `;
-        document.getElementById("myPlayList").innerHTML = html;
+        document.getElementById("mTable").innerHTML = html;
       }
 
       //  console.log(songs)
     );
+}
+function addToMyPlayList(song) {
+  //songId = "3854de5d-aa34-431e-b3f5-d924e04a4f26";
+
+  let songAtt = song.getAttribute("id");
+  fetch(`${SERVER_ROOT}/api/playlist/add`, {
+    method: "POST",
+    body: JSON.stringify({
+      songId: songAtt,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((songs) => {
+      //   let html = `
+
+      //     <thead>
+      //         <tr>
+      //             <th scope="col">ID</th>
+      //             <th scope="col">Title</th>
+      //             <th scope="col">REl.Date</th>
+      //              <th scope="col">Actions</th>
+      //         </tr>
+      //     </thead>
+      //     <tbody id="table-body">
+
+      // `;
+
+      //   songs.forEach((song) => {
+      //     html += `
+      //               <tr id="${song.id}">
+      //                   <th scope="row">${song.orderId}</th>
+      //                   <td>${song.title}</td>
+      //                    <td>${song.releaseDate}</td>
+
+      //                </tr>
+      //          `;
+      //   });
+
+      //   html += `
+      //           </tbody>
+
+      //       `;
+      //   document.getElementById("pTable").innerHTML = html;
+      console.log(songs);
+    });
 
   // console.log("adding--" + songId);
 }
@@ -166,7 +211,7 @@ function fetchPlayList() {
     .then(
       (songs) => {
         let html = `
-          <table class="table" id=playlist-table">
+          
           <thead>
               <tr>
                   <th scope="col">ID</th>
@@ -178,29 +223,26 @@ function fetchPlayList() {
           <tbody id="table-body">
   
       `;
-        let counter = 1;
+
         songs.forEach((song) => {
           html += `
                       <tr id="${song.id}">
-                          <th scope="row">${counter}</th>
+                          <th scope="row">${song.orderID}</th>
                           <td>${song.title}</td>
                            <td>${song.releaseDate}</td>
                            <td>
-                           <audio controls>
-                              <source src="${SERVER_ROOT}/api/${song.urlPath}" type="audio/mp3"> 
-                              </audio>
+
                            
   
                        </tr>               
                  `;
-          counter++;
         });
 
         html += `
                   </tbody>
-              </table>
+              
               `;
-        document.getElementById("myPlayList").innerHTML = html;
+        document.getElementById("pTable").innerHTML = html;
       }
 
       //  console.log(songs)
@@ -208,12 +250,17 @@ function fetchPlayList() {
 }
 
 function afterLogin() {
+  // <audio controls>
+  // <source src="${SERVER_ROOT}/api/${song.urlPath}" type="audio/mp3">
+  // </audio>
+
   document.getElementById("search").style.display = "block";
   document.getElementById("logout-div").style.display = "block";
   document.getElementById("login-div").style.display = "none";
   fetchMusic();
   fetchPlayList();
   document.getElementById("content").innerHTML = "Content of the music";
+  //document.getElementById("mTable").style.display = "block-inline";
 }
 
 function notLogin() {
@@ -221,4 +268,6 @@ function notLogin() {
   document.getElementById("logout-div").style.display = "none";
   document.getElementById("login-div").style.display = "block";
   document.getElementById("content").innerHTML = "Welcome to MIU Station";
+  document.getElementById("mTable").style.display = "none";
+  document.getElementById("pTable").style.display = "none";
 }

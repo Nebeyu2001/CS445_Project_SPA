@@ -18,48 +18,51 @@
 
   <body>
     <div class="container-fluid">
-      <div class="row">
-        <header id="header">
-          <div col-4 id="left">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-file-music-fill"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-.5 4.11v1.8l-2.5.5v5.09c0 .495-.301.883-.662 1.123C7.974 12.866 7.499 13 7 13c-.5 0-.974-.134-1.338-.377-.36-.24-.662-.628-.662-1.123s.301-.883.662-1.123C6.026 10.134 6.501 10 7 10c.356 0 .7.068 1 .196V4.41a1 1 0 0 1 .804-.98l1.5-.3a1 1 0 0 1 1.196.98z"
-              />
-            </svg>
+      <header id="header">
+        <div col-4 id="left">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="blue"
+            class="bi bi-file-music-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-.5 4.11v1.8l-2.5.5v5.09c0 .495-.301.883-.662 1.123C7.974 12.866 7.499 13 7 13c-.5 0-.974-.134-1.338-.377-.36-.24-.662-.628-.662-1.123s.301-.883.662-1.123C6.026 10.134 6.501 10 7 10c.356 0 .7.068 1 .196V4.41a1 1 0 0 1 .804-.98l1.5-.3a1 1 0 0 1 1.196.98z"
+            />
+          </svg>
+        </div>
+        <div col-8 id="right">
+          <div id="search">
+            <input id="search-input" />
+            <button id="searchBtn" class="btn btn-primary">Search</button>
           </div>
-          <div col-8 id="right">
-            <div id="search">
-              <input id="search-input" />
-              <button class="btn btn-primary">Search</button>
-            </div>
-            <div id="login-div">
-              <input id="username" />
-              <input id="password" />
-              <button class="btn btn-primary" id="loginBtn">Login</button>
-              <div id="errormessage"></div>
-            </div>
-            <div id="logout-div">
-              <button class="btn btn-primary" id="logoutBtn">Logout</button>
-            </div>
+          <div id="login-div">
+            <input id="username" />
+            <input id="password" />
+            <button class="btn btn-primary" id="loginBtn">Login</button>
+            <div id="errormessage"></div>
           </div>
-        </header>
-      </div>
+          <div id="logout-div">
+            <button class="btn btn-primary" id="logoutBtn">Logout</button>
+          </div>
+        </div>
+      </header>
+
       <div id="content">Welcome to MIU Music Station</div>
-      <div id="musiclist"></div>
+      <div id="musiclist">
+        <table id="mTable" class="table"></table>
+      </div>
       <h4>My Playlist</h4>
 
-      <div id="myPlayList"></div>
+      <div id="myPlayList">
+        <table id="pTable" class="table"></table>
+      </div>
       <div id="footer-player">
-        <audio controls>
+        <!-- <audio controls>
           <source src="musicas/bad_romance.mp3" type="audio/mp3" />
-        </audio>
+        </audio> -->
       </div>
     </div>
   </body>
