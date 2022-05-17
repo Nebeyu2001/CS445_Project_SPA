@@ -176,7 +176,7 @@ function fetchPlayList() {
         <tr>
           <td scope="row">${song.orderId}</td>
           <td>${song.title}</td>
-          <td><input type="button"  value="remove"/><input type="button"  value="play"/></td>
+          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)" value="remove"/><input type="button"  value="play"/></td>
        </tr>            
                  `;
         });
@@ -227,7 +227,7 @@ function addToMyPlayList(song) {
                     <tr>
                         <td scope="row">${song.orderId}</td>
                         <td>${song.title}</td>
-                        <td><input type="button" playlistId="${song.id}" onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
+                        <td><input type="button" playlistId="${song.songId}"  onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
                      </tr>
                `;
       });
@@ -278,7 +278,7 @@ function removePlayList(song) {
         <tr>
           <td scope="row">${song.orderId}</td>
           <td>${song.title}</td>
-          <td><input type="button"  value="remove"/><input type="button"  value="play"/></td>
+          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
        </tr>
                  `;
         });
@@ -304,15 +304,16 @@ function afterLogin() {
   document.getElementById("login-div").style.display = "none";
   fetchMusic();
   fetchPlayList();
-  document.getElementById("content").innerHTML = "Content of the music";
+  document.getElementById("content").innerHTML = "Song Options";
   //document.getElementById("mTable").style.display = "block-inline";
 }
 
 function notLogin() {
   document.getElementById("search").style.display = "none";
   document.getElementById("logout-div").style.display = "none";
+  document.getElementById("myPlayList").style.display = "none";
   document.getElementById("login-div").style.display = "block";
-  document.getElementById("content").innerHTML = "Welcome to MIU Station";
+  document.getElementById("content").innerHTML = "Welcome to Music Station";
   document.getElementById("mTable").style.display = "none";
   document.getElementById("pTable").style.display = "none";
 }
