@@ -76,7 +76,7 @@ function searchSongs() {
         let counter = 1;
         songs.forEach((song) => {
           html += `
-                    <tr id="${song.id}">
+                    <tr>
                         <th scope="row">${counter}</th>
                         <td>${song.title}</td>
                          <td>${song.releaseDate}</td>
@@ -176,7 +176,7 @@ function fetchPlayList() {
         <tr>
           <td scope="row">${song.orderId}</td>
           <td>${song.title}</td>
-          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)" value="remove"/><input type="button"  value="play"/></td>
+          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)" value="remove"/>&nbsp&nbsp<input type="button" playSong="${song.urlPath}" onclick="playSong(this)" value="play"/></td>
        </tr>            
                  `;
         });
@@ -227,7 +227,7 @@ function addToMyPlayList(song) {
                     <tr>
                         <td scope="row">${song.orderId}</td>
                         <td>${song.title}</td>
-                        <td><input type="button" playlistId="${song.songId}"  onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
+                        <td><input type="button" playlistId="${song.songId}"  onclick="removePlayList(this)"  value="remove"/><input type="button" playSong="${song.urlPath}" onclick="playSong(this)" value="play"/></td>
                      </tr>
                `;
       });
@@ -278,7 +278,7 @@ function removePlayList(song) {
         <tr>
           <td scope="row">${song.orderId}</td>
           <td>${song.title}</td>
-          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)"  value="remove"/><input type="button"  value="play"/></td>
+          <td><input type="button" playlistId="${song.songId}" onclick="removePlayList(this)"  value="remove"/><input type="button" playSong="${song.urlPath}" onclick="playSong(this)"  value="play"/></td>
        </tr>
                  `;
         });
@@ -293,6 +293,32 @@ function removePlayList(song) {
       //  console.log(songs)
     );
 }
+
+function playSong(song) {
+  let playAtt = song.getAttribute("playSong");
+  document.getElementById(
+    "footer-player"
+  ).innerHTML = `<audio controls class="embed-responsive-item">
+  <source src="${SERVER_ROOT}/${playAtt} "type ="audio/mpeg"/>
+</audio>`;
+}
+
+// function playSong(song) {
+//   let playAtt = song.getAttribute("playSong");
+
+//   fetch(`${SERVER_ROOT}/${playAtt}`, {
+//     headers: {
+//       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+//       "Content-Type": "application/json",
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((songs) => {
+//       let searchSong = document.getElementById("footer-player");
+//       searchSong.innerHTML = `<audio controls class="embed-responsive-item">
+//   <source src="${SERVER_ROOT}/${playAtt} "type ="audio/mpeg"/>
+// </audio>`;
+// }
 
 function afterLogin() {
   // <audio controls>
@@ -316,4 +342,5 @@ function notLogin() {
   document.getElementById("content").innerHTML = "Welcome to Music Station";
   document.getElementById("mTable").style.display = "none";
   document.getElementById("pTable").style.display = "none";
+  document.getElementById("footer-player").style.display = "none";
 }
