@@ -23,9 +23,6 @@ window.onload = function () {
       .then((response) => response.json())
       .then((data) => {
         loggedInFeatures(data);
-        // fetchMusic();
-        // fetchPlayList()
-        // document.getElementById('conten').innerHTML="Content of the music";
       });
   };
 
@@ -80,7 +77,6 @@ function searchSongs() {
                         <th scope="row">${counter}</th>
                         <td>${song.title}</td>
                          <td>${song.releaseDate}</td>
-                         <td>
                          <input type="button"  onclick="addToMyPlayList(${song.id});" value="ADD"/>
                          
 
@@ -296,11 +292,12 @@ function removePlayList(song) {
 
 function playSong(song) {
   let playAtt = song.getAttribute("playSong");
-  document.getElementById(
-    "footer-player"
-  ).innerHTML = `<audio controls class="embed-responsive-item">
-  <source src="${SERVER_ROOT}/${playAtt} "type ="audio/mpeg"/>
+  let x = document.getElementById("footer-player");
+  x.innerHTML = `<audio controls autoplay class="embed-responsive-item">
+  <source src="${SERVER_ROOT}/${playAtt}" type ="audio/mpeg"/>
 </audio>`;
+
+  x.play();
 }
 
 // function playSong(song) {
